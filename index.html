@@ -229,17 +229,29 @@ body {
     width: 100%;
   }
 
-  /* 🔥 THIS IS THE IMPORTANT PART */
   .products {
-    grid-template-columns: repeat(2, 1fr); /* 2 items per row */
-    gap: 12px;
-    padding: 12px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .product {
+    padding: 14px;
   }
 
   .product img {
-    height: 160px; /* fits phone nicely */
+    height: 200px;   /* 👈 bigger image */
   }
 
+  .product h3 {
+    font-size: 16px;
+    margin: 8px 0 4px;
+  }
+
+  .product p {
+    font-size: 14px;
+  }
+  
   #detail {
     max-width: 100%;
     margin: 0;
@@ -250,6 +262,15 @@ body {
     width: 48px;
     height: 48px;
   }
+  .img-arrow {
+    touch-action: manipulation;
+    z-index: 5;
+  }
+
+  .share-btn {
+    z-index: 6;
+  }
+ 
 
   #cartPanel {
     width: 100%;
@@ -389,6 +410,8 @@ function setCategory(cat, btn){
 }
 
 function openDetail(i){
+  history.pushState({ page: "detail" }, "");
+  
   currentProduct = products[i];
   currentImage = 0;
   hero.style.display="none";
@@ -406,15 +429,15 @@ function openDetail(i){
   });
 }
 
+
 function setImage(i){ currentImage=i; dImg.src=currentProduct.images[i]; }
 function nextImage(){ currentImage=(currentImage+1)%currentProduct.images.length; setImage(currentImage); }
 function prevImage(){ currentImage=(currentImage-1+currentProduct.images.length)%currentProduct.images.length; setImage(currentImage); }
 
 function goBack(){
-  detail.style.display="none";
-  productDiv.style.display="grid";
-  hero.style.display="block";
+  history.back();
 }
+
 
 function shareProduct(){
   window.open(`https://wa.me/?text=${encodeURIComponent(currentProduct.name+" - ₹"+currentProduct.price)}`);
@@ -475,6 +498,12 @@ function orderNow(){
 }
 
 renderProducts();
+window.onpopstate = function(e){
+  detail.style.display="none";
+  productDiv.style.display="grid";
+  hero.style.display="block";
+};
+
 </script>
 
 </body>
